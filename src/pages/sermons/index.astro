@@ -1,0 +1,85 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { api } from '../../lib/api';
+import { Play, Calendar, User } from 'lucide-react';
+
+let sermons = [];
+try {
+  const response = await api.getSermons({ limit: 12 });
+  sermons = response.data || [];
+} catch (error) {
+  console.error('Error fetching sermons:', error);
+}
+---
+
+<MainLayout title="Sermones" description="Escucha nuestros sermones y mensajes de fe">
+  <!-- Hero Section -->
+  <section class="relative py-20 bg-gradient-to-br from-church-deep-blue to-church-blue text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6">Sermones</h1>
+      <p class="text-xl md:text-2xl text-church-gray max-w-3xl mx-auto">
+        Mensajes que transforman vidas y fortalecen la fe
+      </p>
+    </div>
+  </section>
+
+  <!-- Sermons Grid -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      {sermons.length === 0 ? (
+        <div class="text-center py-12">
+          <p class="text-xl text-gray-600">No hay sermones disponibles en este momento.</p>
+          <p class="text-gray-500 mt-2">Vuelve pronto para ver nuestros últimos mensajes.</p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sermons.map((sermon: any) => (
+            <a href={`/sermons/${sermon._id}`} class="card group hover:scale-105 transition-transform duration-300">
+              <div class="relative aspect-video bg-gradient-to-br from-church-deep-blue to-church-blue rounded-lg mb-4 overflow-hidden">
+                {sermon.thumbnailUrl ? (
+                  <img
+                    src={sermon.thumbnailUrl}
+                    alt={sermon.title}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center">
+                    <Play class="w-16 h-16 text-white opacity-50" />
+                  </div>
+                )}
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <Play class="w-12 h-12 text-white" />
+                </div>
+              </div>
+              
+              <h3 class="text-xl font-bold text-church-deep-blue mb-2 group-hover:text-church-blue transition-colors">
+                {sermon.title}
+              </h3>
+              
+              <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                {sermon.description}
+              </p>
+
+              {sermon.bibleVerse && (
+                <p class="text-church-gold text-sm font-medium mb-3 italic">
+                  {sermon.bibleVerse}
+                </p>
+              )}
+              
+              <div class="flex items-center justify-between text-sm text-gray-500">
+                <div class="flex items-center">
+                  <User class="w-4 h-4 mr-1" />
+                  <span>{sermon.pastor}</span>
+                </div>
+                <div class="flex items-center">
+                  <Calendar class="w-4 h-4 mr-1" />
+                  <span>{new Date(sermon.date).toLocaleDateString('es-ES')}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</MainLayout>

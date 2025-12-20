@@ -1,0 +1,296 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Calendar from "../components/Calendar.astro";
+import EventCard from "../components/EventCard.astro";
+import type { User, Event } from "../types";
+import { isSuperAdmin } from "../lib/utils/roles";
+import { formatDate } from "../lib/utils/date";
+import { Plus, Calendar as CalendarIcon } from "lucide-react";
+
+const user = Astro.locals.user as User | undefined;
+
+// Fetch all events
+let events: Event[] = [];
+
+try {
+  const eventsResponse = await fetch(
+    `${import.meta.env.PUBLIC_API_URL || "http://localhost:3000/api"}/events`
+  );
+  if (eventsResponse.ok) {
+    events = await eventsResponse.json();
+  }
+} catch (error) {
+  console.error("Error fetching events:", error);
+}
+
+const now = new Date();
+const upcomingEvents = events
+  .filter((event) => new Date(event.date) > now)
+  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  .slice(0, 5);
+
+const isAdmin = user && isSuperAdmin(user);
+---
+
+<MainLayout title="Calendario">
+  <section class="py-12 px-4 min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-7xl">
+      <!-- Header -->
+      <div
+        class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8"
+      >
+        <div>
+          <h1 class="text-4xl font-bold text-church-deep-blue mb-2">
+            <CalendarIcon class="w-10 h-10 inline mb-1" />
+            Calendario de Eventos
+          </h1>
+          <p class="text-gray-600">
+            Planifica y no te pierdas ninguna actividad
+          </p>
+        </div>
+
+        {
+          isAdmin && (
+            <button id="add-to-calendar-btn" class="btn-primary mt-4 md:mt-0">
+              <Plus class="w-5 h-5 inline mr-2" />
+              Agregar al Calendario
+            </button>
+          )
+        }
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Calendar -->
+        <div class="lg:col-span-2">
+          <Calendar events={events} />
+        </div>
+
+        <!-- Upcoming Events Sidebar -->
+        <div>
+          <div class="card">
+            <h2 class="text-xl font-bold text-church-deep-blue mb-4">
+              Próximos Eventos
+            </h2>
+
+            {
+              upcomingEvents.length > 0 ? (
+                <div class="space-y-4">
+                  {upcomingEvents.map((event) => (
+                    <a
+                      href={`/eventos/${event._id}`}
+                      class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <h3 class="font-semibold text-church-deep-blue mb-1">
+                        {event.title}
+                      </h3>
+                      <p class="text-sm text-gray-600 mb-2">
+                        {formatDate(event.date, "long")}
+                      </p>
+                      {event.location && (
+                        <p class="text-xs text-gray-500">📍 {event.location}</p>
+                      )}
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p class="text-gray-500 text-sm">
+                  No hay eventos próximos programados
+                </p>
+              )
+            }
+
+            <a
+              href="/eventos"
+              class="block mt-4 text-center text-church-blue hover:text-church-deep-blue font-medium text-sm"
+            >
+              Ver todos los eventos →
+            </a>
+          </div>
+
+          <!-- Calendar Legend -->
+          <div class="card mt-6">
+            <h3 class="font-semibold text-gray-700 mb-3">Leyenda</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-church-blue"></div>
+                <span class="text-gray-600">Día con eventos</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div
+                  class="w-3 h-3 rounded-full bg-church-blue ring-2 ring-church-blue ring-offset-2"
+                >
+                </div>
+                <span class="text-gray-600">Día actual</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events for Selected Day Modal -->
+  <div
+    id="day-events-modal"
+    class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+  >
+    <div
+      class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <h2 id="modal-date" class="text-2xl font-bold text-church-deep-blue">
+        </h2>
+        <button id="close-day-modal" class="text-gray-500 hover:text-gray-700">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div id="day-events-list" class="space-y-4">
+        <!-- Events will be inserted here dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add to Calendar Modal (for admins) -->
+  {
+    isAdmin && (
+      <div
+        id="calendar-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+      >
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-church-deep-blue">
+              Agregar Evento al Calendario
+            </h2>
+            <button
+              id="close-calendar-modal"
+              class="text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="p-4 bg-yellow-50 rounded-lg">
+            <p class="text-sm text-gray-600">
+              ℹ️ <strong>Nota:</strong> Esta funcionalidad te redirigirá a la
+              página de eventos donde podrás crear un nuevo evento.
+            </p>
+
+            <div class="mt-4 flex gap-3">
+              <a href="/eventos" class="flex-1 btn-primary text-center">
+                Ir a Eventos
+              </a>
+              <button id="cancel-calendar-modal" class="flex-1 btn-outline">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+</MainLayout>
+
+<script define:vars={{ events }}>
+  // Handle calendar day clicks
+  window.addEventListener("calendar-day-click", (e) => {
+    const { date } = e.detail;
+    const selectedDate = new Date(date);
+
+    // Filter events for this day
+    const dayEvents = events.filter((event) => {
+      const eventDate = new Date(event.date);
+      return (
+        eventDate.getDate() === selectedDate.getDate() &&
+        eventDate.getMonth() === selectedDate.getMonth() &&
+        eventDate.getFullYear() === selectedDate.getFullYear()
+      );
+    });
+
+    if (dayEvents.length === 0) return;
+
+    // Show modal with events
+    const modal = document.getElementById("day-events-modal");
+    const modalDate = document.getElementById("modal-date");
+    const eventsList = document.getElementById("day-events-list");
+
+    if (!modal || !modalDate || !eventsList) return;
+
+    // Set date
+    modalDate.textContent = selectedDate.toLocaleDateString("es-ES", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    // Render events
+    eventsList.innerHTML = dayEvents
+      .map(
+        (event) => `
+      <a href="/eventos/${event._id}" class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+        <h3 class="font-semibold text-church-deep-blue mb-2">${event.title}</h3>
+        <p class="text-sm text-gray-600 mb-2">${event.description}</p>
+        ${event.location ? `<p class="text-xs text-gray-500">📍 ${event.location}</p>` : ""}
+      </a>
+    `
+      )
+      .join("");
+
+    // Show modal
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+
+  // Close day events modal
+  document.getElementById("close-day-modal")?.addEventListener("click", () => {
+    const modal = document.getElementById("day-events-modal");
+    modal?.classList.add("hidden");
+    modal?.classList.remove("flex");
+  });
+
+  // Add to calendar modal (admin)
+  const addToCalendarBtn = document.getElementById("add-to-calendar-btn");
+  const calendarModal = document.getElementById("calendar-modal");
+  const closeCalendarModal = document.getElementById("close-calendar-modal");
+  const cancelCalendarModal = document.getElementById("cancel-calendar-modal");
+
+  addToCalendarBtn?.addEventListener("click", () => {
+    calendarModal?.classList.remove("hidden");
+    calendarModal?.classList.add("flex");
+  });
+
+  closeCalendarModal?.addEventListener("click", () => {
+    calendarModal?.classList.add("hidden");
+    calendarModal?.classList.remove("flex");
+  });
+
+  cancelCalendarModal?.addEventListener("click", () => {
+    calendarModal?.classList.add("hidden");
+    calendarModal?.classList.remove("flex");
+  });
+</script>

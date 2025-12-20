@@ -1,0 +1,179 @@
+---
+import DashboardLayout from "../layouts/DashboardLayout.astro";
+import DashboardWidget from "../components/DashboardWidget.astro";
+import EventCard from "../components/EventCard.astro";
+import type { User, Event } from "../types";
+import { isSuperAdmin } from "../lib/utils/roles";
+import { Calendar } from "lucide-react";
+
+const user = Astro.locals.user as User;
+
+if (!user) {
+  return Astro.redirect("/login");
+}
+
+// Fetch events
+let events: Event[] = [];
+let attendingEvents: Event[] = [];
+
+try {
+  const eventsResponse = await fetch(
+    `${import.meta.env.PUBLIC_API_URL || "http://localhost:3000/api"}/events?limit=20`
+  );
+  if (eventsResponse.ok) {
+    events = await eventsResponse.json();
+  }
+
+  // Filter events user is attending
+  attendingEvents = events.filter((event) =>
+    event.attendingUsers.includes(user._id)
+  );
+} catch (error) {
+  console.error("Error fetching events:", error);
+}
+
+// Calculate metrics
+const now = new Date();
+const upcomingEvents = events.filter((event) => new Date(event.date) > now);
+const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+const eventsThisMonth = events.filter((event) => {
+  const eventDate = new Date(event.date);
+  return eventDate >= monthStart && eventDate <= monthEnd;
+});
+
+const recommendedEvents = upcomingEvents.slice(0, 4);
+---
+
+<DashboardLayout title="Dashboard">
+  <!-- Welcome Section -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-church-deep-blue mb-2">
+      ¡Hola, {user.firstName}! 👋
+    </h1>
+    <p class="text-gray-600">
+      Bienvenido a tu panel de control. Aquí puedes ver tus eventos y
+      actividades.
+    </p>
+  </div>
+
+  <!-- Metrics Widgets -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <DashboardWidget
+      title="Eventos Inscritos"
+      value={attendingEvents.length}
+      iconName="CheckCircle"
+      iconColor="text-green-600"
+    />
+
+    <DashboardWidget
+      title="Próximos Eventos"
+      value={upcomingEvents.length}
+      iconName="Calendar"
+      iconColor="text-blue-600"
+    />
+
+    <DashboardWidget
+      title="Este Mes"
+      value={eventsThisMonth.length}
+      iconName="TrendingUp"
+      iconColor="text-purple-600"
+    />
+
+    <DashboardWidget
+      title="Total Eventos"
+      value={events.length}
+      iconName="Users"
+      iconColor="text-orange-600"
+    />
+  </div>
+
+  <!-- My Events Section -->
+  {
+    attendingEvents.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-church-deep-blue mb-4">
+          Mis Eventos
+        </h2>
+        <Calendar className="w-6 h-6 inline mr-2" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {attendingEvents.slice(0, 3).map((event) => (
+            <EventCard event={event} showActions={false} isAttending={true} />
+          ))}
+        </div>
+        {attendingEvents.length > 3 && (
+          <div class="mt-4 text-center">
+            <a
+              href="/eventos"
+              class="text-church-blue hover:text-church-deep-blue font-medium"
+            >
+              Ver todos mis eventos →
+            </a>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  <!-- Recommended Events -->
+  {
+    recommendedEvents.length > 0 && (
+      <div>
+        <h2 class="text-2xl font-bold text-church-deep-blue mb-4">
+          Eventos Recomendados
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {recommendedEvents.map((event) => (
+            <EventCard
+              event={event}
+              showActions={true}
+              isAttending={attendingEvents.some((e) => e._id === event._id)}
+              isSuperAdmin={isSuperAdmin(user)}
+            />
+          ))}
+        </div>
+        <div class="mt-6 text-center">
+          <a href="/eventos" class="btn-primary inline-block">
+            Ver Todos los Eventos
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  <!-- Empty State -->
+  {
+    events.length === 0 && (
+      <div class="text-center py-12">
+        {/* class="w-16 h-16 text-gray-400 mx-auto mb-4" */}
+        {/* <Calendar /> */}
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">
+          No hay eventos disponibles
+        </h3>
+        <p class="text-gray-500 mb-4">
+          Pronto tendremos nuevos eventos para ti.
+        </p>
+      </div>
+    )
+  }
+</DashboardLayout>
+
+<script is:raw>
+  // Handle attend/unattend buttons
+  document.querySelectorAll('[data-action="attend"]').forEach((button) => {
+    button.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const eventId = (e.currentTarget as HTMLElement).dataset.eventId;
+
+      if (!eventId) return;
+
+      try {
+        // This will be implemented when we add the attend method to API
+        console.log("Attend event:", eventId);
+        alert("Funcionalidad de inscripción próximamente");
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+</script>

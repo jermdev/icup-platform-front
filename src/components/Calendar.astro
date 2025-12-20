@@ -1,0 +1,138 @@
+---
+import type { Event } from "../types";
+import { getDaysInMonth, getMonthName, isSameDay } from "../lib/utils/date";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+interface Props {
+  events: Event[];
+  currentMonth?: number;
+  currentYear?: number;
+}
+
+const now = new Date();
+const {
+  events,
+  currentMonth = now.getMonth(),
+  currentYear = now.getFullYear(),
+} = Astro.props;
+
+const days = getDaysInMonth(currentYear, currentMonth);
+const monthName = getMonthName(currentMonth);
+const today = new Date();
+
+// Group events by date
+const eventsByDate = new Map<string, Event[]>();
+events.forEach((event) => {
+  const eventDate = new Date(event.date);
+  const dateKey = `${eventDate.getFullYear()}-${eventDate.getMonth()}-${eventDate.getDate()}`;
+  if (!eventsByDate.has(dateKey)) {
+    eventsByDate.set(dateKey, []);
+  }
+  eventsByDate.get(dateKey)!.push(event);
+});
+
+function getEventsForDay(day: Date): Event[] {
+  const dateKey = `${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`;
+  return eventsByDate.get(dateKey) || [];
+}
+
+const weekDays = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+---
+
+<div class="card">
+  <!-- Calendar Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-church-deep-blue">
+      {monthName}
+      {currentYear}
+    </h2>
+
+    <div class="flex gap-2">
+      <button
+        id="prev-month"
+        data-month={currentMonth}
+        data-year={currentYear}
+        class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Mes anterior"
+      >
+        <ChevronLeft class="w-5 h-5" />
+      </button>
+      <button
+        id="next-month"
+        data-month={currentMonth}
+        data-year={currentYear}
+        class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Mes siguiente"
+      >
+        <ChevronRight class="w-5 h-5" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Week Days -->
+  <div class="grid grid-cols-7 gap-2 mb-2">
+    {
+      weekDays.map((day) => (
+        <div class="text-center font-semibold text-sm text-gray-600 py-2">
+          {day}
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Calendar Days -->
+  <div class="grid grid-cols-7 gap-2">
+    {
+      days.map((day) => {
+        const isCurrentMonth = day.getMonth() === currentMonth;
+        const isToday = isSameDay(day, today);
+        const dayEvents = getEventsForDay(day);
+        const hasEvents = dayEvents.length > 0;
+
+        return (
+          <button
+            data-date={day.toISOString()}
+            data-has-events={hasEvents}
+            class={`
+            relative p-3 rounded-lg text-center transition-all min-h-[60px]
+            ${isCurrentMonth ? "text-gray-900" : "text-gray-400"}
+            ${isToday ? "bg-church-blue text-white font-bold" : "hover:bg-gray-100"}
+            ${hasEvents && !isToday ? "bg-church-blue/10 font-semibold" : ""}
+          `}
+          >
+            <span class="block text-sm">{day.getDate()}</span>
+            {hasEvents && (
+              <div class="flex gap-1 justify-center mt-1">
+                {dayEvents.slice(0, 3).map(() => (
+                  <div
+                    class={`w-1.5 h-1.5 rounded-full ${isToday ? "bg-white" : "bg-church-blue"}`}
+                  />
+                ))}
+              </div>
+            )}
+          </button>
+        );
+      })
+    }
+  </div>
+</div>
+
+<script>
+  // Calendar navigation will be handled by the page
+  document.querySelectorAll("[data-date]").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const target = e.currentTarget as HTMLElement;
+      const date = target.dataset.date;
+      const hasEvents = target.dataset.hasEvents === "true";
+
+      if (hasEvents) {
+        // Dispatch custom event that the page can listen to
+        window.dispatchEvent(
+          new CustomEvent("calendar-day-click", {
+            detail: { date },
+          })
+        );
+      }
+    });
+  });
+</script>

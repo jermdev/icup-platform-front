@@ -1,0 +1,251 @@
+---
+import { Home, Calendar, BookOpen, Image, Phone, Info } from "lucide-react";
+
+const navItems = [
+  { name: "Inicio", href: "/", icon: Home },
+  { name: "Nosotros", href: "/about", icon: Info },
+  { name: "Sermones", href: "/sermons", icon: BookOpen },
+  { name: "Galería", href: "/gallery", icon: Image },
+  { name: "Eventos", href: "/events", icon: Calendar },
+  { name: "Calendario", href: "/calendar", icon: Calendar },
+  { name: "Contacto", href: "/contact", icon: Phone },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="bg-white shadow-md sticky top-0 z-50">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center space-x-3 group">
+        <div
+          class="w-12 h-12 bg-gradient-to-br from-church-deep-blue to-church-blue rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+        >
+          <span class="text-white font-bold text-xl">UP</span>
+        </div>
+        <div class="hidden md:block">
+          <h1 class="text-xl font-bold text-church-deep-blue">
+            Unidos en Su Presencia
+          </h1>
+          <p class="text-xs text-gray-600">Iglesia Cristiana</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="hidden lg:flex items-center space-x-1">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-church-blue/10 hover:text-church-deep-blue ${
+                  currentPath === item.href
+                    ? "bg-church-deep-blue text-white"
+                    : "text-gray-700"
+                }`}
+              >
+                {item.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Auth Section -->
+      <div class="hidden md:flex items-center space-x-3">
+        {
+          Astro.locals.user ? (
+            <>
+              <a href="/dashboard" class="btn-primary text-sm px-4 py-2">
+                Volver a Mi Panel
+              </a>
+              <div class="relative">
+                <button
+                  id="user-menu-button"
+                  class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <img
+                    src={
+                      Astro.locals.user.profileImage ||
+                      `https://ui-avatars.com/api/?name=${Astro.locals.user.firstName}+${Astro.locals.user.lastName}&background=2563eb&color=fff`
+                    }
+                    alt={Astro.locals.user.firstName}
+                    class="w-8 h-8 rounded-full"
+                  />
+                  <span class="font-medium text-gray-700">
+                    {Astro.locals.user.firstName}
+                  </span>
+
+                  <svg
+                    class="w-4 h-4 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                <div
+                  id="user-menu"
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden"
+                >
+                  <a
+                    href="/dashboard"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Dashboard
+                  </a>
+                  <a
+                    href="/my-events"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Mis Eventos
+                  </a>
+                  <a
+                    href="/profile"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Mi Perfil
+                  </a>
+                  <hr class="my-2" />
+                  <button
+                    id="header-logout-btn"
+                    class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                  >
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <a href="/login" class="btn-outline text-sm px-4 py-2">
+                Iniciar Sesión
+              </a>
+              <a href="/register" class="btn-primary text-sm px-4 py-2">
+                Registrarse
+              </a>
+            </>
+          )
+        }
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-button"
+        class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Toggle menu"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4">
+      <ul class="space-y-2">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class={`block px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  currentPath === item.href
+                    ? "bg-church-deep-blue text-white"
+                    : "text-gray-700 hover:bg-church-blue/10"
+                }`}
+              >
+                {item.name}
+              </a>
+            </li>
+          ))
+        }
+        {
+          Astro.locals.user ? (
+            <li class="pt-4 space-y-2">
+              <a href="/dashboard" class="block btn-primary text-center">
+                Volver a Mi Panel
+              </a>
+              <a href="/my-events" class="block btn-outline text-center">
+                Mis Eventos
+              </a>
+            </li>
+          ) : (
+            <li class="pt-4 space-y-2">
+              <a href="/login" class="block btn-outline text-center">
+                Iniciar Sesión1
+              </a>
+              <a href="/register" class="block btn-primary text-center">
+                Registrarse
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<script>
+  import { api } from "../lib/api";
+
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  mobileMenuButton?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
+  });
+
+  // User Menu Dropdown
+  const userMenuButton = document.getElementById("user-menu-button");
+  const userMenu = document.getElementById("user-menu");
+
+  userMenuButton?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    userMenu?.classList.toggle("hidden");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!userMenu?.classList.contains("hidden")) {
+      if (
+        !userMenuButton?.contains(e.target as Node) &&
+        !userMenu?.contains(e.target as Node)
+      ) {
+        userMenu?.classList.add("hidden");
+      }
+    }
+  });
+
+  // Logout functionality
+  async function handleLogout() {
+    try {
+      await api.logout();
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout error:", error);
+      window.location.href = "/login";
+    }
+  }
+
+  document
+    .getElementById("header-logout-btn")
+    ?.addEventListener("click", handleLogout);
+</script>

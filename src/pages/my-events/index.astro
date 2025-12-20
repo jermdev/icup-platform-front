@@ -1,0 +1,251 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import EventCard from "../../components/EventCard.astro";
+import type { User, Event } from "../../types";
+import { Calendar, Filter } from "lucide-react";
+
+const user = Astro.locals.user as User;
+
+if (!user) {
+  return Astro.redirect("/login");
+}
+
+// Fetch user's events
+let interestedEvents: Event[] = [];
+let attendingEvents: Event[] = [];
+let allEvents: Event[] = [];
+
+try {
+  const eventsResponse = await fetch(
+    `${import.meta.env.PUBLIC_API_URL || "http://localhost:3000/api"}/events`
+  );
+  if (eventsResponse.ok) {
+    allEvents = await eventsResponse.json();
+
+    // Filter events where user is interested or attending
+    interestedEvents = allEvents.filter((event) =>
+      event.interestedUsers.includes(user._id)
+    );
+
+    attendingEvents = allEvents.filter((event) =>
+      event.attendingUsers.includes(user._id)
+    );
+  }
+} catch (error) {
+  console.error("Error fetching events:", error);
+}
+
+const upcomingAttending = attendingEvents.filter(
+  (event) => new Date(event.date) > new Date()
+);
+
+// Event type filters
+const eventTypes = [
+  { value: "all", label: "Todos" },
+  { value: "event", label: "Eventos" },
+  { value: "activity", label: "Actividades" },
+];
+---
+
+<DashboardLayout title="Mis Eventos">
+  <section class="py-8">
+    <div class="container mx-auto max-w-7xl px-4">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1
+          class="text-4xl font-bold text-church-deep-blue mb-2 flex items-center gap-3"
+        >
+          <Calendar className="w-10 h-10" />
+          Mis Eventos
+        </h1>
+        <p class="text-gray-600">Eventos en los que estás participando</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="card text-center">
+          <div class="text-3xl font-bold text-church-blue mb-1">
+            {attendingEvents.length}
+          </div>
+          <div class="text-sm text-gray-600">Total Asistiendo</div>
+        </div>
+
+        <div class="card text-center">
+          <div class="text-3xl font-bold text-green-600 mb-1">
+            {upcomingAttending.length}
+          </div>
+          <div class="text-sm text-gray-600">Próximos Eventos</div>
+        </div>
+
+        <div class="card text-center">
+          <div class="text-3xl font-bold text-purple-600 mb-1">
+            {interestedEvents.length}
+          </div>
+          <div class="text-sm text-gray-600">Interesado</div>
+        </div>
+      </div>
+
+      <!-- Event Type Filters -->
+      <div class="card mb-6">
+        <div class="flex items-center gap-2 mb-4">
+          <Filter className="w-5 h-5 text-gray-600" />
+          <h3 class="font-semibold text-gray-700">Filtrar por tipo:</h3>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          {
+            eventTypes.map((type) => (
+              <button
+                data-event-type={type.value}
+                class="event-type-filter px-4 py-2 rounded-lg border border-gray-300 hover:border-church-blue hover:bg-church-blue/10 transition-colors"
+              >
+                {type.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Attending Events Section -->
+      {
+        attendingEvents.length > 0 ? (
+          <>
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-church-deep-blue mb-4">
+                Eventos Confirmados
+              </h2>
+              <div
+                id="attending-events-grid"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {attendingEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    showActions={true}
+                    isAttending={true}
+                    isSuperAdmin={false}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Interested Events Section */}
+            {interestedEvents.length > 0 && (
+              <div class="mb-6">
+                <h2 class="text-2xl font-bold text-church-deep-blue mb-4 mt-8">
+                  Eventos de Interés
+                </h2>
+                <div
+                  id="interested-events-grid"
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                  {interestedEvents.map((event) => (
+                    <EventCard
+                      event={event}
+                      showActions={true}
+                      isAttending={attendingEvents.some(
+                        (e) => e._id === event._id
+                      )}
+                      isSuperAdmin={false}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div class="text-center py-12">
+            <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">
+              No tienes eventos confirmados
+            </h3>
+            <p class="text-gray-500 mb-4">
+              Explora nuestros eventos y marca tu asistencia
+            </p>
+            <a href="/events" class="btn-primary inline-block">
+              Ver Todos los Eventos
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</DashboardLayout>
+
+<script>
+  import { api } from "../../lib/api";
+
+  // Event type filter functionality
+  const typeFilters = document.querySelectorAll(".event-type-filter");
+
+  typeFilters.forEach((filter) => {
+    filter.addEventListener("click", (e) => {
+      const eventType = (e.currentTarget as HTMLElement).dataset.eventType;
+
+      // Update active state
+      typeFilters.forEach((f) => {
+        f.classList.remove(
+          "bg-church-blue",
+          "text-white",
+          "border-church-blue"
+        );
+        f.classList.add("border-gray-300");
+      });
+      (e.currentTarget as HTMLElement).classList.add(
+        "bg-church-blue",
+        "text-white",
+        "border-church-blue"
+      );
+      (e.currentTarget as HTMLElement).classList.remove("border-gray-300");
+
+      // Filter events by type
+      const attendingGrid = document.getElementById("attending-events-grid");
+      const interestedGrid = document.getElementById("interested-events-grid");
+
+      [attendingGrid, interestedGrid].forEach((grid) => {
+        if (!grid) return;
+
+        const eventCards = grid.querySelectorAll("[data-event-id]");
+        eventCards.forEach((card) => {
+          const cardEventType = (card as HTMLElement).dataset.eventType;
+
+          if (eventType === "all" || cardEventType === eventType) {
+            (card.parentElement as HTMLElement).style.display = "block";
+          } else {
+            (card.parentElement as HTMLElement).style.display = "none";
+          }
+        });
+      });
+    });
+  });
+
+  // Handle attend/unattend buttons
+  document.addEventListener("click", async (e) => {
+    const target = e.target as HTMLElement;
+    const button = target.closest("[data-action='attend']") as HTMLElement;
+
+    if (!button) return;
+
+    const eventId = button.dataset.eventId;
+    if (!eventId) return;
+
+    try {
+      const apiUrl =
+        import.meta.env.PUBLIC_API_URL || "http://localhost:3000/api";
+      const response = await fetch(`${apiUrl}/events/${eventId}/attending`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar asistencia");
+      }
+
+      // Reload page to update event lists
+      window.location.reload();
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error al actualizar asistencia. Por favor intenta de nuevo.");
+    }
+  });
+</script>

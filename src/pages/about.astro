@@ -1,0 +1,231 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { Heart, Target, Users, Book } from "lucide-react";
+---
+
+<MainLayout
+  title="Nosotros"
+  description="Conoce más sobre nuestra iglesia, visión, misión y equipo pastoral"
+>
+  <!-- Hero Section -->
+  <section
+    class="relative py-20 bg-gradient-to-br from-church-deep-blue to-church-blue text-white"
+  >
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6">Nuestra Historia</h1>
+      <p class="text-xl md:text-2xl text-church-gray max-w-3xl mx-auto">
+        Una comunidad comprometida con el amor de Cristo y el servicio al
+        prójimo
+      </p>
+    </div>
+  </section>
+
+  <!-- Vision & Mission -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div class="card">
+          <div class="flex items-center mb-6">
+            <div
+              class="w-16 h-16 bg-church-deep-blue rounded-full flex items-center justify-center mr-4"
+            >
+              <Target className="w-8 h-8 text-white" />
+            </div>
+            <h2 class="text-3xl font-bold text-church-deep-blue">
+              Nuestra Visión
+            </h2>
+          </div>
+          <p class="text-gray-700 leading-relaxed text-lg">
+            Ser una iglesia que impacte nuestra comunidad y el mundo con el amor
+            transformador de Jesucristo, formando discípulos comprometidos que
+            vivan su fe de manera auténtica y poderosa.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="flex items-center mb-6">
+            <div
+              class="w-16 h-16 bg-church-gold rounded-full flex items-center justify-center mr-4"
+            >
+              <Heart className="w-8 h-8 text-gray-900" />
+            </div>
+            <h2 class="text-3xl font-bold text-church-deep-blue">
+              Nuestra Misión
+            </h2>
+          </div>
+          <p class="text-gray-700 leading-relaxed text-lg">
+            Glorificar a Dios mediante la adoración, el discipulado, la comunión
+            y el servicio, alcanzando a los perdidos y edificando a los
+            creyentes en la fe cristiana.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Values -->
+  <section
+    class="py-20 bg-gradient-to-br from-church-blue/5 to-church-deep-blue/5"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="section-title">Nuestros Valores Fundamentales</h2>
+        <p class="section-subtitle">
+          Los principios que guían todo lo que hacemos
+        </p>
+      </div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
+      >
+        <div
+          class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-16 h-16 bg-church-deep-blue/10 rounded-full flex items-center justify-center mb-4"
+          >
+            <Book className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-3">
+            Palabra de Dios
+          </h3>
+          <p class="text-gray-600">
+            La Biblia es nuestra autoridad final en todo asunto de fe y
+            práctica.
+          </p>
+        </div>
+
+        <div
+          class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-16 h-16 bg-church-deep-blue/10 rounded-full flex items-center justify-center mb-4"
+          >
+            <Heart className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-3">
+            Amor Genuino
+          </h3>
+          <p class="text-gray-600">
+            Amamos a Dios con todo nuestro corazón y a nuestro prójimo como a
+            nosotros mismos.
+          </p>
+        </div>
+
+        <div
+          class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-16 h-16 bg-church-deep-blue/10 rounded-full flex items-center justify-center mb-4"
+          >
+            <Users className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-3">
+            Comunidad
+          </h3>
+          <p class="text-gray-600">
+            Creemos en el poder de la comunidad cristiana para edificar y
+            fortalecer la fe.
+          </p>
+        </div>
+
+        <div
+          class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-16 h-16 bg-church-deep-blue/10 rounded-full flex items-center justify-center mb-4"
+          >
+            <Target className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-3">
+            Excelencia
+          </h3>
+          <p class="text-gray-600">
+            Hacemos todo con excelencia para la gloria de Dios y el bien de su
+            pueblo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pastoral Team -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="section-title">Nuestro Equipo Pastoral</h2>
+        <p class="section-subtitle">
+          Líderes comprometidos con servir a nuestra congregación
+        </p>
+      </div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto"
+      >
+        <div class="card text-center group">
+          <div
+            class="w-32 h-32 bg-gradient-to-br from-church-deep-blue to-church-blue rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold group-hover:scale-110 transition-transform"
+          >
+            JP
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-1">
+            Pastor Juan Pérez
+          </h3>
+          <p class="text-church-gold font-medium mb-3">Pastor Principal</p>
+          <p class="text-gray-600 text-sm">
+            Sirviendo con pasión y dedicación para guiar a la congregación en el
+            camino de Cristo.
+          </p>
+        </div>
+
+        <div class="card text-center group">
+          <div
+            class="w-32 h-32 bg-gradient-to-br from-church-blue to-church-gold rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold group-hover:scale-110 transition-transform"
+          >
+            MG
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-1">
+            Pastora María García
+          </h3>
+          <p class="text-church-gold font-medium mb-3">Pastora Asociada</p>
+          <p class="text-gray-600 text-sm">
+            Dedicada al ministerio de mujeres y familias, fortaleciendo los
+            lazos de nuestra comunidad.
+          </p>
+        </div>
+
+        <div class="card text-center group">
+          <div
+            class="w-32 h-32 bg-gradient-to-br from-church-gold to-church-deep-blue rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold group-hover:scale-110 transition-transform"
+          >
+            CR
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-1">
+            Pastor Carlos Rodríguez
+          </h3>
+          <p class="text-church-gold font-medium mb-3">Pastor de Jóvenes</p>
+          <p class="text-gray-600 text-sm">
+            Apasionado por alcanzar a la próxima generación con el mensaje del
+            evangelio.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-church-deep-blue text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-6">¿Quieres Ser Parte?</h2>
+      <p class="text-xl text-church-gray mb-8 max-w-2xl mx-auto">
+        Te invitamos a conocernos y ser parte de esta familia en Cristo
+      </p>
+      <a
+        href="/contact"
+        class="btn-primary bg-church-gold text-gray-900 hover:bg-church-gold/90"
+      >
+        Contáctanos Hoy
+      </a>
+    </div>
+  </section>
+</MainLayout>

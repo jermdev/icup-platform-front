@@ -1,0 +1,377 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import EventCard from "../../components/EventCard.astro";
+import type { User, Event } from "../../types";
+import { isSuperAdmin } from "../../lib/utils/roles";
+import { Calendar, Plus, Filter } from "lucide-react";
+
+const user = Astro.locals.user as User | undefined;
+
+// Fetch all events
+let events: Event[] = [];
+let attendingEventIds: string[] = [];
+
+try {
+  const eventsResponse = await fetch(
+    `${import.meta.env.PUBLIC_API_URL || "http://localhost:3000/api"}/events`
+  );
+  if (eventsResponse.ok) {
+    events = await eventsResponse.json();
+  }
+
+  if (user) {
+    attendingEventIds = events
+      .filter((event) => event.attendingUsers.includes(user._id))
+      .map((event) => event._id);
+  }
+} catch (error) {
+  console.error("Error fetching events:", error);
+}
+
+// Categories for filtering
+const categories = [
+  { value: "all", label: "Todos" },
+  { value: "worship", label: "Adoración" },
+  { value: "bible-study", label: "Estudio Bíblico" },
+  { value: "prayer", label: "Oración" },
+  { value: "youth", label: "Jóvenes" },
+  { value: "special", label: "Especial" },
+  { value: "cell-group", label: "Célula" },
+  { value: "training", label: "Capacitación" },
+  { value: "teaching", label: "Enseñanza" },
+];
+
+const upcomingEvents = events.filter(
+  (event) => new Date(event.date) > new Date()
+);
+const isAdmin = user && isSuperAdmin(user);
+---
+
+<MainLayout title="Eventos">
+  <section class="py-12 px-4 min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-7xl">
+      <!-- Header -->
+      <div
+        class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8"
+      >
+        <div>
+          <h1 class="text-4xl font-bold text-church-deep-blue mb-2">
+            <!-- class="w-10 h-10 inline mb-1" -->
+            <Calendar />
+            Eventos
+          </h1>
+          <p class="text-gray-600">
+            Descubre y participa en nuestras actividades
+          </p>
+        </div>
+
+        {
+          isAdmin && (
+            <button id="create-event-btn" class="btn-primary mt-4 md:mt-0">
+              {/* class="w-5 h-5 inline mr-2" */}
+              <Plus />
+              Crear Evento
+            </button>
+          )
+        }
+      </div>
+
+      <!-- Filters -->
+      <div class="card mb-6">
+        <div class="flex items-center gap-2 mb-4">
+          <!-- class="w-5 h-5 text-gray-600" -->
+          <Filter />
+          <h3 class="font-semibold text-gray-700">Filtrar por categoría:</h3>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          {
+            categories.map((category) => (
+              <button
+                data-category={category.value}
+                class="category-filter px-4 py-2 rounded-lg border border-gray-300 hover:border-church-blue hover:bg-church-blue/10 transition-colors"
+              >
+                {category.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="card text-center">
+          <div class="text-3xl font-bold text-church-blue mb-1">
+            {events.length}
+          </div>
+          <div class="text-sm text-gray-600">Total Eventos</div>
+        </div>
+
+        <div class="card text-center">
+          <div class="text-3xl font-bold text-green-600 mb-1">
+            {upcomingEvents.length}
+          </div>
+          <div class="text-sm text-gray-600">Próximos Eventos</div>
+        </div>
+
+        {
+          user && (
+            <div class="card text-center">
+              <div class="text-3xl font-bold text-purple-600 mb-1">
+                {attendingEventIds.length}
+              </div>
+              <div class="text-sm text-gray-600">Mis Eventos</div>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Events Grid -->
+      {
+        events.length > 0 ? (
+          <div
+            id="events-grid"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {events.map((event) => (
+              <EventCard
+                event={event}
+                showActions={!!user}
+                isAttending={attendingEventIds.includes(event._id)}
+                isSuperAdmin={isAdmin}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            {/* class="w-16 h-16 text-gray-400 mx-auto mb-4" */}
+            <Calendar />
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">
+              No hay eventos disponibles
+            </h3>
+            <p class="text-gray-500">
+              Pronto tendremos nuevos eventos para ti.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Create/Edit Event Modal (placeholder for admins) -->
+  {
+    isAdmin && (
+      <div
+        id="event-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+      >
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-church-deep-blue">
+              Crear Evento
+            </h2>
+            <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <form id="event-form" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Título
+              </label>
+              <input
+                type="text"
+                name="title"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-blue focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Descripción
+              </label>
+              <textarea
+                name="description"
+                required
+                rows="3"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-blue focus:border-transparent"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Fecha
+                </label>
+                <input
+                  type="datetime-local"
+                  name="date"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-blue focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Ubicación
+                </label>
+                <input
+                  type="text"
+                  name="location"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-blue focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Categoría
+              </label>
+              <select
+                name="category"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-blue focus:border-transparent"
+              >
+                {categories
+                  .filter((c) => c.value !== "all")
+                  .map((category) => (
+                    <option value={category.value}>{category.label}</option>
+                  ))}
+              </select>
+            </div>
+
+            <div class="p-4 bg-yellow-50 rounded-lg">
+              <p class="text-sm text-gray-600">
+                ℹ️ <strong>Nota:</strong> Esta es una interfaz de demostración.
+                La funcionalidad de crear eventos se implementará próximamente.
+              </p>
+            </div>
+
+            <div class="flex gap-3">
+              <button type="submit" class="flex-1 btn-primary">
+                Crear Evento
+              </button>
+              <button
+                type="button"
+                id="cancel-modal"
+                class="flex-1 btn-outline"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    )
+  }
+</MainLayout>
+
+<script>
+  import { api } from "../../lib/api";
+
+  // Filter functionality
+  const categoryFilters = document.querySelectorAll(".category-filter");
+  const eventsGrid = document.getElementById("events-grid");
+
+  categoryFilters.forEach((filter) => {
+    filter.addEventListener("click", (e) => {
+      const category = (e.currentTarget as HTMLElement).dataset.category;
+
+      // Update active state
+      categoryFilters.forEach((f) => {
+        f.classList.remove(
+          "bg-church-blue",
+          "text-white",
+          "border-church-blue"
+        );
+        f.classList.add("border-gray-300");
+      });
+      (e.currentTarget as HTMLElement).classList.add(
+        "bg-church-blue",
+        "text-white",
+        "border-church-blue"
+      );
+      (e.currentTarget as HTMLElement).classList.remove("border-gray-300");
+
+      // Filter events
+      const eventCards =
+        eventsGrid?.querySelectorAll("[data-event-id]")?.parentElement
+          ?.parentElement;
+      // Implementation would filter based on category
+      console.log("Filter by category:", category);
+    });
+  });
+
+  // Modal functionality
+  const createEventBtn = document.getElementById("create-event-btn");
+  const eventModal = document.getElementById("event-modal");
+  const closeModal = document.getElementById("close-modal");
+  const cancelModal = document.getElementById("cancel-modal");
+  const eventForm = document.getElementById("event-form");
+
+  createEventBtn?.addEventListener("click", () => {
+    eventModal?.classList.remove("hidden");
+    eventModal?.classList.add("flex");
+  });
+
+  closeModal?.addEventListener("click", () => {
+    eventModal?.classList.add("hidden");
+    eventModal?.classList.remove("flex");
+  });
+
+  cancelModal?.addEventListener("click", () => {
+    eventModal?.classList.add("hidden");
+    eventModal?.classList.remove("flex");
+  });
+
+  eventForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Funcionalidad de crear evento próximamente");
+    eventModal?.classList.add("hidden");
+    eventModal?.classList.remove("flex");
+  });
+
+  // Attend/Edit/Delete event actions
+  document.addEventListener("click", async (e) => {
+    const target = e.target as HTMLElement;
+    const button = target.closest("[data-action]") as HTMLElement;
+
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const eventId = button.dataset.eventId;
+
+    if (!eventId) return;
+
+    try {
+      if (action === "attend") {
+        // Will implement attend/unattend
+        console.log("Toggle attend for event:", eventId);
+        alert("Funcionalidad de inscripción próximamente");
+      } else if (action === "edit") {
+        console.log("Edit event:", eventId);
+        alert("Funcionalidad de edición próximamente");
+      } else if (action === "delete") {
+        if (confirm("¿Estás seguro de eliminar este evento?")) {
+          console.log("Delete event:", eventId);
+          alert("Funcionalidad de eliminación próximamente");
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+</script>

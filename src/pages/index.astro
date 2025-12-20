@@ -1,0 +1,243 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import {
+  ChevronRight,
+  Calendar,
+  Users,
+  Heart,
+  BookOpen,
+  LayoutDashboard,
+} from "lucide-react";
+
+const isLoggedIn = Astro.cookies.has("access_token");
+---
+
+<MainLayout title="Bienvenidos | Iglesia Cristiana">
+  <!-- Hero Section -->
+  <section
+    class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-church-deep-blue via-church-blue to-church-deep-blue overflow-hidden"
+  >
+    <!-- Background Pattern -->
+    <div
+      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1200&fm=webp&q=80')] bg-cover bg-center opacity-20"
+    >
+    </div>
+
+    <!-- Content -->
+    <div class="container mx-auto px-4 relative z-10 text-center text-white">
+      <h1
+        class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-slide-up"
+      >
+        Bienvenidos a Nuestra Iglesia
+      </h1>
+      <p
+        class="text-xl md:text-2xl mb-8 text-church-gray max-w-3xl mx-auto animate-slide-up"
+      >
+        Una comunidad de fe, esperanza y amor donde todos son bienvenidos
+      </p>
+      <div
+        class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up animate-delay-200"
+      >
+        {
+          isLoggedIn ? (
+            <a
+              href="/dashboard"
+              class="btn-primary bg-church-gold text-gray-900 hover:bg-church-gold/90"
+            >
+              Volver a mi panel
+              <LayoutDashboard className="inline-block ml-2 w-5 h-5" />
+            </a>
+          ) : (
+            <a
+              href="/events"
+              class="btn-primary bg-church-gold text-gray-900 hover:bg-church-gold/90"
+            >
+              Ver Eventos
+              <ChevronRight className="inline-block ml-2 w-5 h-5" />
+            </a>
+          )
+        }
+        <a
+          href="/about"
+          class="btn-outline border-white text-white hover:bg-white hover:text-church-deep-blue"
+        >
+          Conócenos
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div
+      class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+    >
+      <svg
+        class="w-6 h-6 text-white"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Schedule Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="section-title">Horarios de Servicio</h2>
+        <p class="section-subtitle">Te esperamos en nuestras reuniones</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div
+          class="card text-center group hover:scale-105 transition-transform duration-300"
+        >
+          <div
+            class="w-16 h-16 bg-church-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-church-blue/20 transition-colors"
+          >
+            <Calendar className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Domingo</h3>
+          <p class="text-gray-600 mb-1">Servicio Principal</p>
+          <p class="text-2xl font-bold text-church-gold">10:00 AM</p>
+        </div>
+
+        <div
+          class="card text-center group hover:scale-105 transition-transform duration-300"
+        >
+          <div
+            class="w-16 h-16 bg-church-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-church-blue/20 transition-colors"
+          >
+            <Users className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">
+            Miércoles
+          </h3>
+          <p class="text-gray-600 mb-1">Estudio Bíblico</p>
+          <p class="text-2xl font-bold text-church-gold">7:00 PM</p>
+        </div>
+
+        <div
+          class="card text-center group hover:scale-105 transition-transform duration-300"
+        >
+          <div
+            class="w-16 h-16 bg-church-blue/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-church-blue/20 transition-colors"
+          >
+            <Heart className="w-8 h-8 text-church-deep-blue" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Viernes</h3>
+          <p class="text-gray-600 mb-1">Noche de Oración</p>
+          <p class="text-2xl font-bold text-church-gold">7:00 PM</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section
+    class="py-20 bg-gradient-to-br from-church-blue/5 to-church-deep-blue/5"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="section-title">Nuestros Valores</h2>
+        <p class="section-subtitle">
+          Los principios que guían nuestra comunidad
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center p-6 animate-slide-up">
+          <div
+            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <Heart className="w-10 h-10 text-white" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Amor</h3>
+          <p class="text-gray-600">
+            Amamos a Dios sobre todas las cosas y a nuestro prójimo como a
+            nosotros mismos.
+          </p>
+        </div>
+
+        <div class="text-center p-6 animate-slide-up animate-delay-200">
+          <div
+            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <Users className="w-10 h-10 text-white" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">
+            Comunidad
+          </h3>
+          <p class="text-gray-600">
+            Creemos en el poder de la comunidad y el apoyo mutuo en la fe.
+          </p>
+        </div>
+
+        <div class="text-center p-6 animate-slide-up animate-delay-400">
+          <div
+            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <BookOpen className="w-10 h-10 text-white" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Palabra</h3>
+          <p class="text-gray-600">
+            La Biblia es nuestra guía y fundamento para la vida cristiana.
+          </p>
+        </div>
+
+        <div class="text-center p-6 animate-slide-up animate-delay-600">
+          <div
+            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <Heart className="w-10 h-10 text-white" />
+          </div>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Servicio</h3>
+          <p class="text-gray-600">
+            Servimos a Dios sirviendo a los demás con humildad y dedicación.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bible Verse Section -->
+  <section
+    class="py-20 bg-church-deep-blue text-white relative overflow-hidden"
+  >
+    <div
+      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1200&fm=webp&q=80')] bg-cover bg-center opacity-10"
+    >
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <blockquote
+          class="text-3xl md:text-4xl font-serif italic mb-6 leading-relaxed"
+        >
+          "Porque donde dos o tres se reúnen en mi nombre, allí estoy yo en
+          medio de ellos."
+        </blockquote>
+        <p class="text-xl text-church-gold font-semibold">Mateo 18:20</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="section-title">¿Primera Vez?</h2>
+      <p class="section-subtitle max-w-2xl mx-auto">
+        Nos encantaría conocerte. Ven y sé parte de nuestra familia en Cristo.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/contact" class="btn-primary"> Contáctanos </a>
+        <a href="/events" class="btn-outline"> Ver Próximos Eventos </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

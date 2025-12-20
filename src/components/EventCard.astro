@@ -1,0 +1,147 @@
+---
+import type { Event } from "../types";
+import { formatDate, getRelativeTime } from "../lib/utils/date";
+import { Calendar, MapPin, Users } from "lucide-react";
+
+interface Props {
+  event: Event;
+  showActions?: boolean;
+  isAttending?: boolean;
+  isSuperAdmin?: boolean;
+  onAttend?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
+const {
+  event,
+  showActions = false,
+  isAttending = false,
+  isSuperAdmin = false,
+  onAttend,
+  onEdit,
+  onDelete,
+} = Astro.props;
+
+const categoryColors: Record<string, string> = {
+  worship: "bg-purple-100 text-purple-800",
+  "bible-study": "bg-blue-100 text-blue-800",
+  prayer: "bg-green-100 text-green-800",
+  youth: "bg-pink-100 text-pink-800",
+  special: "bg-yellow-100 text-yellow-800",
+  "cell-group": "bg-indigo-100 text-indigo-800",
+  training: "bg-orange-100 text-orange-800",
+  teaching: "bg-teal-100 text-teal-800",
+};
+
+const categoryLabels: Record<string, string> = {
+  worship: "Adoración",
+  "bible-study": "Estudio Bíblico",
+  prayer: "Oración",
+  youth: "Jóvenes",
+  special: "Especial",
+  "cell-group": "Célula",
+  training: "Capacitación",
+  teaching: "Enseñanza",
+};
+---
+
+<div class="card group hover:shadow-xl transition-shadow duration-300">
+  <a href={`/eventos/${event._id}`} class="block">
+    <div class="relative h-48 overflow-hidden rounded-t-lg">
+      <img
+        src={event.imageUrl ||
+          "https://images.unsplash.com/photo-1438032005730-c779502df39b?w=800&fm=webp&q=80"}
+        alt={event.title}
+        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+      />
+      {
+        event.category && (
+          <span
+            class={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${categoryColors[event.category] || "bg-gray-100 text-gray-800"}`}
+          >
+            {categoryLabels[event.category] || event.category}
+          </span>
+        )
+      }
+    </div>
+  </a>
+
+  <div class="p-6">
+    <a href={`/eventos/${event._id}`}>
+      <h3
+        class="text-xl font-bold text-church-deep-blue mb-2 group-hover:text-church-blue transition-colors"
+      >
+        {event.title}
+      </h3>
+    </a>
+
+    <p class="text-gray-600 mb-4 line-clamp-2">
+      {event.description}
+    </p>
+
+    <div class="space-y-2 mb-4">
+      <div class="flex items-center text-sm text-gray-700">
+        <Calendar class="w-4 h-4 mr-2 text-church-blue" />
+        <span class="font-medium">{getRelativeTime(event.date)}</span>
+        <span class="mx-2">•</span>
+        <span>{formatDate(event.date, "long")}</span>
+      </div>
+
+      {
+        event.location && (
+          <div class="flex items-center text-sm text-gray-600">
+            <MapPin class="w-4 h-4 mr-2 text-church-blue" />
+            <span>{event.location}</span>
+          </div>
+        )
+      }
+
+      {
+        event.attendingUsers.length > 0 && (
+          <div class="flex items-center text-sm text-gray-600">
+            <Users class="w-4 h-4 mr-2 text-church-blue" />
+            <span>{event.attendingUsers.length} personas asistirán</span>
+          </div>
+        )
+      }
+    </div>
+
+    {
+      showActions && (
+        <div class="flex gap-2 pt-4 border-t">
+          {!isSuperAdmin ? (
+            <button
+              data-event-id={event._id}
+              data-action="attend"
+              class={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                isAttending
+                  ? "bg-green-100 text-green-800 hover:bg-green-200"
+                  : "bg-church-blue text-white hover:bg-church-deep-blue"
+              }`}
+            >
+              {isAttending ? "✓ Inscrito" : "Inscribirme"}
+            </button>
+          ) : (
+            <>
+              <button
+                data-event-id={event._id}
+                data-action="edit"
+                class="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Editar
+              </button>
+              <button
+                data-event-id={event._id}
+                data-action="delete"
+                class="py-2 px-4 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+              >
+                Eliminar
+              </button>
+            </>
+          )}
+        </div>
+      )
+    }
+  </div>
+</div>
