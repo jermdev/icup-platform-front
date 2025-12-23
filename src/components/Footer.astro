@@ -2,9 +2,9 @@
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 ---
 
-<footer class="bg-church-deep-blue text-white">
-  <div class="container mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<footer class="bg-church-deep-blue text-white ">
+  <div class="container mx-auto px-4 py-12 ">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- About -->
       <div>
         <h3 class="text-xl font-bold mb-4">Unidos en Su Presencia</h3>
@@ -13,32 +13,20 @@ import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'
         </p>
       </div>
 
-      <!-- Quick Links -->
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Enlaces Rápidos</h3>
-        <ul class="space-y-2 text-sm">
-          <li><a href="/about" class="text-church-gray hover:text-church-gold transition-colors">Nosotros</a></li>
-          <li><a href="/sermons" class="text-church-gray hover:text-church-gold transition-colors">Sermones</a></li>
-          <li><a href="/events" class="text-church-gray hover:text-church-gold transition-colors">Eventos</a></li>
-          <li><a href="/blog" class="text-church-gray hover:text-church-gold transition-colors">Blog</a></li>
-          <li><a href="/contact" class="text-church-gray hover:text-church-gold transition-colors">Contacto</a></li>
-        </ul>
-      </div>
-
       <!-- Contact Info -->
       <div>
         <h3 class="text-lg font-semibold mb-4">Contacto</h3>
         <ul class="space-y-3 text-sm">
           <li class="flex items-start space-x-2">
-            <MapPin class="w-5 h-5 text-church-gold flex-shrink-0 mt-0.5" />
+            <MapPin className="w-5 h-5 text-church-gold flex-shrink-0 mt-0.5" />
             <span class="text-church-gray">Av. Principal 123, Ciudad, País</span>
           </li>
           <li class="flex items-center space-x-2">
-            <Phone class="w-5 h-5 text-church-gold flex-shrink-0" />
+            <Phone className="w-5 h-5 text-church-gold flex-shrink-0" />
             <span class="text-church-gray">+1 (555) 123-4567</span>
           </li>
           <li class="flex items-center space-x-2">
-            <Mail class="w-5 h-5 text-church-gold flex-shrink-0" />
+            <Mail className="w-5 h-5 text-church-gold flex-shrink-0" />
             <span class="text-church-gray">info@unidosensupresencia.org</span>
           </li>
         </ul>
@@ -55,13 +43,13 @@ import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'
         
         <div class="flex space-x-4">
           <a href="#" class="text-church-gray hover:text-church-gold transition-colors" aria-label="Facebook">
-            <Facebook class="w-6 h-6" />
+            <Facebook className="w-6 h-6" />
           </a>
           <a href="#" class="text-church-gray hover:text-church-gold transition-colors" aria-label="Instagram">
-            <Instagram class="w-6 h-6" />
+            <Instagram className="w-6 h-6" />
           </a>
-          <a href="#" class="text-church-gray hover:text-church-gold transition-colors" aria-label="YouTube">
-            <Youtube class="w-6 h-6" />
+          <a href="https://www.youtube.com/" class="text-church-gray hover:text-church-gold transition-colors" aria-label="YouTube">
+            <Youtube className="w-6 h-6" />
           </a>
         </div>
       </div>

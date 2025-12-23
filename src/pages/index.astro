@@ -15,11 +15,11 @@ const isLoggedIn = Astro.cookies.has("access_token");
 <MainLayout title="Bienvenidos | Iglesia Cristiana">
   <!-- Hero Section -->
   <section
-    class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-church-deep-blue via-church-blue to-church-deep-blue overflow-hidden"
+    class="relative lg:h-full min-h-[70vh] md:min-h-screen py-8 md:py-12 flex items-start lg:items-center justify-center bg-gradient-to-br from-church-deep-blue via-church-blue to-church-deep-blue overflow-hidden"
   >
     <!-- Background Pattern -->
     <div
-      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1200&fm=webp&q=80')] bg-cover bg-center opacity-20"
+      class=" absolute inset-0 bg-[url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1200&fm=webp&q=80')] bg-cover bg-center opacity-20"
     >
     </div>
 
@@ -153,7 +153,7 @@ const isLoggedIn = Astro.cookies.has("access_token");
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div class="text-center p-6 animate-slide-up">
           <div
-            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+            class="w-20 h-20 bg-church-accent-orange rounded-full flex items-center justify-center mx-auto mb-4"
           >
             <Heart className="w-10 h-10 text-white" />
           </div>
@@ -166,7 +166,7 @@ const isLoggedIn = Astro.cookies.has("access_token");
 
         <div class="text-center p-6 animate-slide-up animate-delay-200">
           <div
-            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+            class="w-20 h-20 bg-church-accent-orange rounded-full flex items-center justify-center mx-auto mb-4"
           >
             <Users className="w-10 h-10 text-white" />
           </div>
@@ -180,7 +180,7 @@ const isLoggedIn = Astro.cookies.has("access_token");
 
         <div class="text-center p-6 animate-slide-up animate-delay-400">
           <div
-            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+            class="w-20 h-20 bg-church-accent-orange rounded-full flex items-center justify-center mx-auto mb-4"
           >
             <BookOpen className="w-10 h-10 text-white" />
           </div>
@@ -192,7 +192,7 @@ const isLoggedIn = Astro.cookies.has("access_token");
 
         <div class="text-center p-6 animate-slide-up animate-delay-600">
           <div
-            class="w-20 h-20 bg-church-deep-blue rounded-full flex items-center justify-center mx-auto mb-4"
+            class="w-20 h-20 bg-church-accent-orange rounded-full flex items-center justify-center mx-auto mb-4"
           >
             <Heart className="w-10 h-10 text-white" />
           </div>
