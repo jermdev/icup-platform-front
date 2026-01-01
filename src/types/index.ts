@@ -13,6 +13,23 @@ export interface User {
   updatedAt: string;
 }
 
+// TODO: Defenir espesificamente, la estructura de informacion que porpocionara el la api para semones
+export interface Sermon {
+  _id: string;
+  title: string;
+  date: string;
+  content : string
+  description: string;
+  imgUrl?: string;
+  thumbnailUrl: string;
+  pastor: string;
+  tags?: string[];
+  createdAt: string;
+  updatedAt: string;
+  bibleVerse: string;
+
+}
+
 export type EventCategory =
   | 'worship'
   | 'bible-study'

@@ -308,8 +308,7 @@ const isAdmin = user && isSuperAdmin(user);
 
       // Filter events
       const eventCards =
-        eventsGrid?.querySelectorAll("[data-event-id]")?.parentElement
-          ?.parentElement;
+        eventsGrid?.parentElement?.parentElement;
       // Implementation would filter based on category
       console.log("Filter by category:", category);
     });

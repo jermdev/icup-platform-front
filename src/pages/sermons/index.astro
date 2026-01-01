@@ -2,11 +2,12 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import { api } from '../../lib/api';
 import { Play, Calendar, User } from 'lucide-react';
+import type { Sermon } from '../../types/index.ts';
 
-let sermons = [];
+let sermons:Sermon[] = [];
 try {
-  const response = await api.getSermons({ limit: 12 });
-  sermons = response.data || [];
+  const response:Sermon[] = await api.getSermons({ limit: 12 });
+  sermons = response || [];
 } catch (error) {
   console.error('Error fetching sermons:', error);
 }
@@ -33,7 +34,7 @@ try {
         </div>
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sermons.map((sermon: any) => (
+          {sermons.map((sermon: Sermon) => (
             <a href={`/sermons/${sermon._id}`} class="card group hover:scale-105 transition-transform duration-300">
               <div class="relative aspect-video bg-gradient-to-br from-church-deep-blue to-church-blue rounded-lg mb-4 overflow-hidden">
                 {sermon.thumbnailUrl ? (

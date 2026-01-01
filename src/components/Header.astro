@@ -14,26 +14,30 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="bg-white shadow-md sticky top-0 z-50">
-  <nav class="container mx-auto px-4 py-4">
-    <div class="flex items-center justify-between">
+<header class="bg-white bg-opacity-85 lg:bg-opacity-100  shadow-md sticky top-0 z-50 ">
+  <nav class=" mx-auto px-4 py-4 ">
+    <div class=" flex items-center justify-between">
       <!-- Logo -->
       <a href="/" class="flex items-center space-x-3 group">
         <div
-          class="w-12 h-12 bg-gradient-to-br from-church-deep-blue to-church-blue rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+          class="relative w-12 h-12 bg-gradient-to-br rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
         >
-          <span class="text-white font-bold text-xl">UP</span>
+          <img
+            src="/imagenes/logo.webp"
+            alt="Logo"
+            class="w-12 h-12 object-contain"
+          />
         </div>
         <div class="hidden md:block">
           <h1 class="text-xl font-bold text-church-deep-blue">
-            Unidos en Su Presencia
+            Unidos en Su Presencias
           </h1>
           <p class="text-xs text-gray-600">Iglesia Cristiana</p>
         </div>
       </a>
 
       <!-- Desktop Navigation -->
-      <ul class="hidden lg:flex items-center space-x-1">
+      <ul class="sticky hidden lg:flex items-center space-x-1">
         {
           navItems.map((item) => (
             <li>

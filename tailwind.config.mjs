@@ -7,7 +7,8 @@ export default {
         'church-white': '#fefefe',
         'church-blue': '#6d94bf',
         'church-gold': '#f7bf6a',
-        'church-deep-blue': '#13549b',
+        'church-deep-blue': '#486EAB',
+        'church-accent-orange': '#F29C38',
         'church-gray': '#c6d2e0',
       },
       fontFamily: {

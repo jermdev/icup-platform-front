@@ -1,3 +1,5 @@
+import type { Sermon } from "@/types";
+
 const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
 
 interface RequestOptions extends RequestInit {
@@ -105,7 +107,7 @@ class ApiClient {
   }
 
   // Sermons endpoints
-  async getSermons(params?: { limit?: number; pastor?: string }) {
+  async getSermons(params?: { limit?: number; pastor?: string }) : Promise<Sermon[]> {
     const query = new URLSearchParams();
     if (params?.limit) query.append('limit', params.limit.toString());
     if (params?.pastor) query.append('pastor', params.pastor);
