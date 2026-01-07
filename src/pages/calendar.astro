@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import Calendar from "../components/Calendar.astro";
+// import Calendar from "../components/Calendar.astro";
+import Calendario from "@/components/Calendar";
 import EventCard from "../components/EventCard.astro";
 import type { User, Event } from "../types";
 import { isSuperAdmin } from "../lib/utils/roles";
@@ -62,7 +63,8 @@ const isAdmin = user && isSuperAdmin(user);
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Calendar -->
         <div class="lg:col-span-2">
-          <Calendar events={events} />
+          <!-- <Calendar events={events} /> -->
+           <Calendario client:load />
         </div>
 
         <!-- Upcoming Events Sidebar -->
