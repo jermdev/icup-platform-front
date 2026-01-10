@@ -14,7 +14,7 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="bg-white bg-opacity-85 lg:bg-opacity-100  shadow-md sticky top-0 z-50 ">
+<header class="bg-white shadow-md sticky top-0 z-50 ">
   <nav class=" mx-auto px-4 py-4 ">
     <div class=" flex items-center justify-between">
       <!-- Logo -->
@@ -163,7 +163,20 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4">
+    <div id="mobile-menu" class="px-3 absolute
+    top-full
+    left-0
+    w-full
+    bg-white
+    origin-top
+    scale-y-0
+    opacity-0
+    pointer-events-none
+    transition
+    duration-300
+    ease-[cubic-bezier(0.4,0,0.2,1)]
+    shadow-lg
+    z-50  lg:hidden pb-4">
       <ul class="space-y-2">
         {
           navItems.map((item) => (
@@ -194,7 +207,7 @@ const currentPath = Astro.url.pathname;
           ) : (
             <li class="pt-4 space-y-2">
               <a href="/login" class="block btn-outline text-center">
-                Iniciar Sesión1
+                Iniciar Sesión
               </a>
               <a href="/register" class="block btn-primary text-center">
                 Registrarse
@@ -210,12 +223,22 @@ const currentPath = Astro.url.pathname;
 <script>
   import { api } from "../lib/api";
 
-  const mobileMenuButton = document.getElementById("mobile-menu-button");
-  const mobileMenu = document.getElementById("mobile-menu");
+  // Mobile Menu Toggle
+  function animateMobileMenu() {
+    const button = document.getElementById("mobile-menu-button");
+    const menu = document.getElementById("mobile-menu");
 
-  mobileMenuButton?.addEventListener("click", () => {
-    mobileMenu?.classList.toggle("hidden");
-  });
+    if (!button || !menu) return;
+
+    button.addEventListener("click", () => {
+      
+      menu.classList.toggle("scale-y-0");
+      menu.classList.toggle("opacity-0");
+      menu.classList.toggle("pointer-events-none");
+    });
+
+
+  }
 
   // User Menu Dropdown
   const userMenuButton = document.getElementById("user-menu-button");
@@ -238,7 +261,10 @@ const currentPath = Astro.url.pathname;
     }
   });
 
-  // Logout functionality
+  document.addEventListener("DOMContentLoaded", () => {
+    animateMobileMenu();
+  });
+
   async function handleLogout() {
     try {
       await api.logout();
