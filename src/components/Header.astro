@@ -4,9 +4,9 @@ import { Home, Calendar, BookOpen, Image, Phone, Info } from "lucide-react";
 const navItems = [
   { name: "Inicio", href: "/", icon: Home },
   { name: "Nosotros", href: "/about", icon: Info },
-  { name: "Sermones", href: "/sermons", icon: BookOpen },
-  { name: "Galería", href: "/gallery", icon: Image },
-  { name: "Eventos", href: "/events", icon: Calendar },
+  // { name: "Sermones", href: "/sermons", icon: BookOpen },
+  // { name: "Galería", href: "/gallery", icon: Image },
+  // { name: "Eventos", href: "/events", icon: Calendar },
   { name: "Calendario", href: "/calendar", icon: Calendar },
   { name: "Contacto", href: "/contact", icon: Phone },
 ];
@@ -57,7 +57,8 @@ const currentPath = Astro.url.pathname;
       </ul>
 
       <!-- Auth Section -->
-      <div class="hidden md:flex items-center space-x-3">
+    <!--  Se inivilita toda la seccion de authenticacion, porque por el momento no es necesarios */-->
+     <!--  <div class="hidden md:flex items-center space-x-3">
         {
           Astro.locals.user ? (
             <>
@@ -139,7 +140,7 @@ const currentPath = Astro.url.pathname;
             </>
           )
         }
-      </div>
+      </div> -
 
       <!-- Mobile Menu Button -->
       <button
@@ -194,7 +195,8 @@ const currentPath = Astro.url.pathname;
             </li>
           ))
         }
-        {
+        <!-- No es necsario, por el momento la autenticación-->
+        <!-- {
           Astro.locals.user ? (
             <li class="pt-4 space-y-2">
               <a href="/dashboard" class="block btn-primary text-center">
@@ -214,7 +216,7 @@ const currentPath = Astro.url.pathname;
               </a>
             </li>
           )
-        }
+        } -->
       </ul>
     </div>
   </nav>
