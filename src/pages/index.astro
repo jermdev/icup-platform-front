@@ -49,7 +49,7 @@ const isLoggedIn = Astro.cookies.has("access_token");
             </a>
           ) : (
             <a
-              href="/events"
+              href="/calendar"
               class="btn-primary bg-church-gold text-gray-900 hover:bg-church-gold/90"
             >
               Ver Eventos
@@ -103,8 +103,8 @@ const isLoggedIn = Astro.cookies.has("access_token");
             <Calendar className="w-8 h-8 text-church-deep-blue" />
           </div>
           <h3 class="text-xl font-bold text-church-deep-blue mb-2">Domingo</h3>
-          <p class="text-gray-600 mb-1">Servicio Principal</p>
-          <p class="text-2xl font-bold text-church-gold">10:00 AM</p>
+          <p class="text-gray-600 mb-1">Servicios Principales</p>
+          <p class="text-2xl font-bold text-church-gold">10:00 AM y  16:00 PM</p>
         </div>
 
         <div
@@ -116,10 +116,10 @@ const isLoggedIn = Astro.cookies.has("access_token");
             <Users className="w-8 h-8 text-church-deep-blue" />
           </div>
           <h3 class="text-xl font-bold text-church-deep-blue mb-2">
-            Miércoles
+            Sabado
           </h3>
-          <p class="text-gray-600 mb-1">Estudio Bíblico</p>
-          <p class="text-2xl font-bold text-church-gold">7:00 PM</p>
+          <p class="text-gray-600 mb-1">Ayuno</p>
+          <p class="text-2xl font-bold text-church-gold">9:00 AM</p>
         </div>
 
         <div
@@ -130,9 +130,9 @@ const isLoggedIn = Astro.cookies.has("access_token");
           >
             <Heart className="w-8 h-8 text-church-deep-blue" />
           </div>
-          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Viernes</h3>
-          <p class="text-gray-600 mb-1">Noche de Oración</p>
-          <p class="text-2xl font-bold text-church-gold">7:00 PM</p>
+          <h3 class="text-xl font-bold text-church-deep-blue mb-2">Sabado</h3>
+          <p class="text-gray-600 mb-1">Culto de Jóvenes</p>
+          <p class="text-2xl font-bold text-church-gold">6:00 PM</p>
         </div>
       </div>
     </div>
