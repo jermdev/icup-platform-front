@@ -1,6 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake } from "lucide-react";
+import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake , ArrowDown ,ArrowUp} from "lucide-react";
 ---
 
 <MainLayout
@@ -26,9 +26,9 @@ import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake 
         <p class="mx-auto max-w-3xl text-sm md:text-base text-gray-600 leading-relaxed mb-4">
         En 2018, tras dos semanas de oraciones y la realización de dos ayunos,
         los miembros de la zona de Tahuantinsuyo tomaron la decisión de formar
-        una nueva obra en esta localidad.<span class="inline group-open:hidden text-blue-600" id="Vmas">..Leer más.</span>
+        una nueva obra en esta localidad.<span class="flex justify-center my-3" id="Vmas"><ArrowDown className="block group-open:hidden text-blue-600" /></span>
         </p>
-        <span class="hidden group-open:block text-blue-600" id="Vmenos">Leer menos</span>
+        <span class="hidden flex justify-center" id="Vmenos"> <ArrowUp className="group-open:block text-blue-600"/> </span>
       </div>
 
       <!-- TEXTO RESTANTE -->
