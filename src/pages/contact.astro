@@ -1,6 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 ---
 
 <MainLayout title="Contacto" description="Ponte en contacto con nosotros">
@@ -17,9 +17,9 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
   <!-- Contact Section -->
   <section class="py-20 bg-white">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+      <div class=" max-w-6xl mx-auto">
         <!-- Contact Form -->
-        <div class="card">
+        <!--<div class="card">
           <h2 class="text-3xl font-bold text-church-deep-blue mb-6">Envíanos un Mensaje</h2>
           
           <form id="contact-form" class="space-y-6">
@@ -88,56 +88,55 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
             </button>
           </form>
         </div>
-
+         -->
         <!-- Contact Info -->
         <div class="space-y-8">
           <div>
             <h2 class="text-3xl font-bold text-church-deep-blue mb-6">Información de Contacto</h2>
-            <div class="space-y-6">
+            <div class="space-y-6 grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="flex items-start space-x-4">
                 <div class="w-12 h-12 bg-church-deep-blue/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <MapPin class="w-6 h-6 text-church-deep-blue" />
+                  <MapPin className="w-6 h-6 text-church-deep-blue" />
                 </div>
                 <div>
                   <h3 class="font-semibold text-gray-900 mb-1">Dirección</h3>
                   <p class="text-gray-600">
-                    Av. Principal 123<br />
-                    Ciudad, Estado 12345<br />
-                    País
+                    Av. Valle Sagrado de los Incas 136<br />
+                    Tahuantinsuyo 3ra Zona<br />
+                    Lima, independencia<br />
+                    Perú
                   </p>
                 </div>
               </div>
 
               <div class="flex items-start space-x-4">
-                <div class="w-12 h-12 bg-church-deep-blue/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Phone class="w-6 h-6 text-church-deep-blue" />
-                </div>
-                <div>
+                <!-- <div class="w-12 h-12 bg-church-deep-blue/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-6 h-6 text-church-deep-blue" />
+                </div> -->
+                <!-- <div>
                   <h3 class="font-semibold text-gray-900 mb-1">Teléfono</h3>
-                  <p class="text-gray-600">+1 (555) 123-4567</p>
-                  <p class="text-gray-600">+1 (555) 987-6543</p>
+                  <p class="text-gray-600">+51 (000) 000000000</p>
                 </div>
-              </div>
+              </div> -->
 
               <div class="flex items-start space-x-4">
                 <div class="w-12 h-12 bg-church-deep-blue/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Mail class="w-6 h-6 text-church-deep-blue" />
+                  <Mail className="w-6 h-6 text-church-deep-blue" />
                 </div>
                 <div>
                   <h3 class="font-semibold text-gray-900 mb-1">Email</h3>
-                  <p class="text-gray-600">info@unidosensupresencia.org</p>
-                  <p class="text-gray-600">pastor@unidosensupresencia.org</p>
+                  <p class="text-gray-600">iglesiaunidosensupresencia@gmail.com</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Office Hours -->
-          <div class="card bg-gradient-to-br from-church-blue/5 to-church-deep-blue/5">
+          <!-- <div class="card bg-gradient-to-br from-church-blue/5 to-church-deep-blue/5">
             <h3 class="text-xl font-bold text-church-deep-blue mb-4">Horario de Oficina</h3>
             <div class="space-y-2 text-gray-700">
               <div class="flex justify-between">
-                <span class="font-medium">Lunes - Viernes:</span>
+                <span class="font-medium">Martes - Viernes:</span>
                 <span>9:00 AM - 5:00 PM</span>
               </div>
               <div class="flex justify-between">
@@ -149,13 +148,13 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
                 <span>Cerrado (Servicios)</span>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- Map Placeholder -->
           <div class="card">
             <h3 class="text-xl font-bold text-church-deep-blue mb-4">Ubicación</h3>
             <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-              <MapPin class="w-12 h-12 text-gray-400" />
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d451.85277435082776!2d-77.0406840546682!3d-11.983513937436944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105cfbb6ac2c3b3%3A0x504da18685197073!2sIglesia%20Cristiana%20Unidos%20En%20Su%20Presencia!5e1!3m2!1ses!2spe!4v1768424436462!5m2!1ses!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <p class="text-sm text-gray-600 mt-4">
               Haz clic para ver el mapa en Google Maps
