@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import Carrusel from "../components/Carrusel.tsx";
 import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake , ArrowDown ,ArrowUp} from "lucide-react";
 ---
 
@@ -192,43 +193,10 @@ import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake 
         </p>
       </div>
 
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
-      >
-        <div class="card text-center group">
-          <div
-            class="w-32 h-32 bg-gradient-to-br from-church-deep-blue to-church-blue rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold group-hover:scale-110 transition-transform"
-          > 
-            MB
-          </div>
-          <h3 class="text-xl font-bold text-church-deep-blue mb-1">
-            Pastor Michael Baca
-          </h3>
-          <p class="text-church-gold font-medium mb-3">Pastor Principal</p>
-          <p class="text-gray-600 text-sm">
-            Sirviendo con pasión y dedicación para guiar a la congregación en el
-            camino de Cristo.
-          </p>
-        </div>
-
-        <div class="card text-center group">
-          <div
-            class="w-32 h-32 bg-gradient-to-br from-church-blue to-church-gold rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold group-hover:scale-110 transition-transform"
-          >
-            LA
-          </div>
-          <h3 class="text-xl font-bold text-church-deep-blue mb-1">
-            Pastora Liliana Angeles
-          </h3>
-          <p class="text-church-gold font-medium mb-3">Pastora Asociada</p>
-          <p class="text-gray-600 text-sm">
-            Dedicada al ministerio de mujeres y familias, fortaleciendo los
-            lazos de nuestra comunidad.
-          </p>
-        </div>
+     <Carrusel client:load/>
 
         
-      </div>
+      
     </div>
   </section>
 
