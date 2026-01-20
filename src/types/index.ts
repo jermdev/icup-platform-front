@@ -12,6 +12,13 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+export interface MiembroPastoral {
+  id: string;
+  nombre: string;
+  rol: string;
+  descripcion: string;
+  fotoUrl?: string;
+}
 
 // TODO: Defenir espesificamente, la estructura de informacion que porpocionara el la api para semones
 export interface Sermon {

@@ -1,17 +1,35 @@
-
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-export default function Carrusel() {    
+import type { MiembroPastoral } from "@/types";
 
-    return (
+import MiembroPastoralCard from "./MiembroPastoralCard";
+
+type Props = {
+  item?: JSX.Element[];
+}
+
+export default function Carrusel({ item }: Props) {    
+  
+  
+  // const childrenArray = React.Children.toArray(children);
+  const MiembroPastorales: MiembroPastoral[] = [
+    {id: '1', nombre : "Margarita Angeles Tolentino", descripcion: "Descripcion de Julia", rol: "Ps"},
+    {id: '2', nombre : "Michael Perez Gomez", descripcion: "Descripcion de Michael", rol: "Ps"},
+    {id: '3', nombre : "Ana Lopez Martinez", descripcion: "Descripcion de Ana", rol: "Co-Ps"},
+    {id: '4', nombre : "Carmen Rodriguez Diaz", descripcion: "Descripcion de Carmen", rol: "Co-Ps"},
+    {id: '5', nombre : "Luisa Hernandez Sanchez", descripcion: "Descripcion de Luisa", rol: "Co-Ps"},
+    ]
+  
+  return (
     <div className="multiple-slide-carousel mx-auto max-w-6xl relative">
       <Swiper
 
         modules={[Navigation]}
         loop={true}
-        centeredSlides={true}
+        // centeredSlides={true}
         slidesPerView={3}
         slidesOffsetBefore={145}
         slidesOffsetAfter={50}
@@ -40,19 +58,18 @@ export default function Carrusel() {
             slidesOffsetAfter: 40,
           },
         }}
-      >
+        >
         {
-          [1,2,3,4,5,6,7].map((item) => (
-            <SwiperSlide key={item} className="flex items-center justify-center">
-              
-              <div className="bg-gray-200 max-h-full rounded">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur id lorem est. Vestibulum felis odio, ornare nec metus vitae, mollis tincidunt magna. Nullam vel augue lacus. Fusce sed dolor placerat, consectetur nisi ut, feugiat ex. Etiam eros massa, semper ut ante nec, fringilla blandit mauris. Nam ex leo, sollicitudin ac sodales vel, auctor in turpis. Morbi sit amet mi eu metus varius ullamcorper ac vitae magna. Aenean in augue gravida, mattis metus vitae, consectetur nisl. Aliquam auctor elit ac elementum sollicitudin. Nam lobortis, mi quis gravida volutpat, lacus est sollicitudin orci, at volutpat libero ex in magna. Nunc in interdum leo, et dictum augue. Morbi mi elit, commodo sit amet sapien a, ultrices scelerisque nibh.
-              </div>
+          
+
+            MiembroPastorales.map((info) => (
+            <SwiperSlide key={info.id}  className="flex items-center justify-center">
+               <MiembroPastoralCard key={info.id} {...info} />
             </SwiperSlide>
           ))
-        }
         
-
+      }
+        
         <div className="swiper-button-prev pr-5" />
         <div className="swiper-button-next pl-3.5"/>
       </Swiper>

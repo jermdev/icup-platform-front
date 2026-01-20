@@ -1,7 +1,10 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Carrusel from "../components/Carrusel.tsx";
+import MiembroPastoralCard  from "@/components/MiembroPastoralCard";
 import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake , ArrowDown ,ArrowUp} from "lucide-react";
+import type { loadRenderers } from "astro:container";
+
 ---
 
 <MainLayout
@@ -192,10 +195,14 @@ import { Heart, Target, Users, Book, FlameIcon, Sprout, Compass, HeartHandshake 
           Líderes comprometidos con servir a nuestra congregación
         </p>
       </div>
+      
+      
+      
+      <Carrusel client:load />
+     <!-- <Carrusel item = {} client:load /> -->
+       
 
-     <Carrusel client:load/>
-
-        
+    <!-- <Carrusel client:load/> -->
       
     </div>
   </section>
